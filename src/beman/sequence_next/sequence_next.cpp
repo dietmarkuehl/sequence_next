@@ -1,3 +1,3 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#include <beman/exemplar/identity.hpp>
+#include <beman/sequence_next/sequence_next.hpp>

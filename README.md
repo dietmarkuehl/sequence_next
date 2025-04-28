@@ -1,13 +1,13 @@
-# beman.exemplar: A Beman Library Exemplar
+# beman.sequence_next: A Beman Library Sequence Next
 
 <!--
 SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 -->
 
 <!-- markdownlint-disable-next-line line-length -->
-![Library Status](https://raw.githubusercontent.com/bemanproject/beman/refs/heads/main/images/badges/beman_badge-beman_library_under_development.svg) ![Continuous Integration Tests](https://github.com/bemanproject/exemplar/actions/workflows/ci_tests.yml/badge.svg) ![Lint Check (pre-commit)](https://github.com/bemanproject/exemplar/actions/workflows/pre-commit.yml/badge.svg)
+![Library Status](https://raw.githubusercontent.com/bemanproject/beman/refs/heads/main/images/badges/beman_badge-beman_library_under_development.svg) ![Continuous Integration Tests](https://github.com/bemanproject/sequence_next/actions/workflows/ci_tests.yml/badge.svg) ![Lint Check (pre-commit)](https://github.com/bemanproject/sequence_next/actions/workflows/pre-commit.yml/badge.svg)
 
-`beman.exemplar` is a minimal C++ library conforming to [The Beman Standard](https://github.com/bemanproject/beman/blob/main/docs/BEMAN_STANDARD.md).
+`beman.sequence_next` is a minimal C++ library conforming to [The Beman Standard](https://github.com/bemanproject/beman/blob/main/docs/BEMAN_STANDARD.md).
 This can be used as a template for those intending to write Beman libraries.
 It may also find use as a minimal and modern  C++ project structure.
 
@@ -23,12 +23,12 @@ Its direct usage is usually not needed.
 
 ### Usage: default projection in constrained algorithms
 
-The following code snippet illustrates how we can achieve a default projection using `beman::exemplar::identity`:
+The following code snippet illustrates how we can achieve a default projection using `beman::sequence_next::identity`:
 
 ```cpp
-#include <beman/exemplar/identity.hpp>
+#include <beman/sequence_next/identity.hpp>
 
-namespace exe = beman::exemplar;
+namespace exe = beman::sequence_next;
 
 // Class with a pair of values.
 struct Pair
@@ -91,7 +91,7 @@ This project requires at least the following to build:
 * (Test Only) GoogleTest
 
 You can disable building tests by setting cmake option
-[`BEMAN_EXEMPLAR_BUILD_TESTS`](#beman_exemplar_build_tests) to `OFF`
+[`BEMAN_SEQUENCE_NEXT_BUILD_TESTS`](#beman_sequence_next_build_tests) to `OFF`
 when configuring the project.
 
 Even when tests are being built and run, some will not be compiled
@@ -142,7 +142,7 @@ requires minimal setup.
 
 You can create a codespace for this project by clicking this badge:
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/bemanproject/exemplar)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/bemanproject/sequence_next)
 
 For more detailed documentation regarding creating and developing inside of
 GitHub codespaces, please reference [this doc](https://docs.github.com/en/codespaces/).
@@ -300,18 +300,18 @@ The precise version of GoogleTest that will be used is maintained in
 When configuring the project manually,
 you can pass an array of project specific CMake configs to customize your build.
 
-Project specific options are prefixed with `BEMAN_EXEMPLAR`.
+Project specific options are prefixed with `BEMAN_SEQUENCE_NEXT`.
 You can see the list of available options with:
 
 ```bash
-cmake -LH | grep "BEMAN_EXEMPLAR" -C 2
+cmake -LH | grep "BEMAN_SEQUENCE_NEXT" -C 2
 ```
 
 <details>
 
 <summary> Details of CMake arguments. </summary>
 
-#### `BEMAN_EXEMPLAR_BUILD_TESTS`
+#### `BEMAN_SEQUENCE_NEXT_BUILD_TESTS`
 
 Enable building tests and test infrastructure. Default: ON.
 Values: { ON, OFF }.
@@ -319,7 +319,7 @@ Values: { ON, OFF }.
 You can configure the project to have this option turned off via:
 
 ```bash
-cmake -B build -S . -DCMAKE_CXX_STANDARD=20 -DBEMAN_EXEMPLAR_BUILD_TESTS=OFF
+cmake -B build -S . -DCMAKE_CXX_STANDARD=20 -DBEMAN_SEQUENCE_NEXT_BUILD_TESTS=OFF
 ```
 
 > [!TIP]
@@ -328,67 +328,67 @@ cmake -B build -S . -DCMAKE_CXX_STANDARD=20 -DBEMAN_EXEMPLAR_BUILD_TESTS=OFF
 > disable building tests avoids the project from pulling Google Tests from
 > GitHub.
 
-#### `BEMAN_EXEMPLAR_BUILD_EXAMPLES`
+#### `BEMAN_SEQUENCE_NEXT_BUILD_EXAMPLES`
 
 Enable building examples. Default: ON. Values: { ON, OFF }.
 
 </details>
 
-## Integrate beman.exemplar into your project
+## Integrate beman.sequence_next into your project
 
-To use `beman.exemplar` in your C++ project,
-include an appropriate `beman.exemplar` header from your source code.
+To use `beman.sequence_next` in your C++ project,
+include an appropriate `beman.sequence_next` header from your source code.
 
 ```c++
-#include <beman/exemplar/identity.hpp>
+#include <beman/sequence_next/identity.hpp>
 ```
 
 > [!NOTE]
 >
-> `beman.exemplar` headers are to be included with the `beman/exemplar/` directories prefixed.
+> `beman.sequence_next` headers are to be included with the `beman/sequence_next/` directories prefixed.
 > It is not supported to alter include search paths to spell the include target another way. For instance,
 > `#include <identity.hpp>` is not a supported interface.
 
-How you will link your project against `beman.exemplar` will depend on your build system.
+How you will link your project against `beman.sequence_next` will depend on your build system.
 CMake instructions are provided in following sections.
 
-### Linking your project to beman.exemplar with CMake
+### Linking your project to beman.sequence_next with CMake
 
 For CMake based projects,
-you will need to use the `beman.exemplar` CMake module
-to define the `beman::exemplar` CMake target:
+you will need to use the `beman.sequence_next` CMake module
+to define the `beman::sequence_next` CMake target:
 
 ```cmake
-find_package(beman.exemplar REQUIRED)
+find_package(beman.sequence_next REQUIRED)
 ```
 
-You will also need to add `beman::exemplar` to the link libraries of
-any libraries or executables that include beman.exemplar's header file.
+You will also need to add `beman::sequence_next` to the link libraries of
+any libraries or executables that include beman.sequence_next's header file.
 
 ```cmake
-target_link_libraries(yourlib PUBLIC beman::exemplar)
+target_link_libraries(yourlib PUBLIC beman::sequence_next)
 ```
 
-### Produce beman.exemplar static library locally
+### Produce beman.sequence_next static library locally
 
-You can include exemplar's headers locally
-by producing a static `libbeman.exemplar.a` library.
+You can include sequence_next's headers locally
+by producing a static `libbeman.sequence_next.a` library.
 
 ```bash
 cmake --workflow --preset gcc-release
-cmake --install build/gcc-release --prefix /opt/beman.exemplar
+cmake --install build/gcc-release --prefix /opt/beman.sequence_next
 ```
 
-This will generate such directory structure at `/opt/beman.exemplar`.
+This will generate such directory structure at `/opt/beman.sequence_next`.
 
 ```txt
-/opt/beman.exemplar
+/opt/beman.sequence_next
 ├── include
 │   └── beman
-│       └── exemplar
+│       └── sequence_next
 │           └── identity.hpp
 └── lib
-    └── libbeman.exemplar.a
+    └── libbeman.sequence_next.a
 ```
 
 ## Contributing

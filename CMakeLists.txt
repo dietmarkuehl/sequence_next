@@ -3,41 +3,41 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(
-    beman.exemplar # CMake Project Name, which is also the name of the top-level
+    beman.sequence_next # CMake Project Name, which is also the name of the top-level
     # targets (e.g., library, executable, etc.).
-    DESCRIPTION "A Beman library exemplar"
+    DESCRIPTION "A Beman library sequence_next"
     LANGUAGES CXX
     VERSION 2.1.1
 )
 
 # [CMAKE.SKIP_TESTS]
 option(
-    BEMAN_EXEMPLAR_BUILD_TESTS
+    BEMAN_SEQUENCE_NEXT_BUILD_TESTS
     "Enable building tests and test infrastructure. Default: ${PROJECT_IS_TOP_LEVEL}. Values: { ON, OFF }."
     ${PROJECT_IS_TOP_LEVEL}
 )
 
 # [CMAKE.SKIP_EXAMPLES]
 option(
-    BEMAN_EXEMPLAR_BUILD_EXAMPLES
+    BEMAN_SEQUENCE_NEXT_BUILD_EXAMPLES
     "Enable building examples. Default: ${PROJECT_IS_TOP_LEVEL}. Values: { ON, OFF }."
     ${PROJECT_IS_TOP_LEVEL}
 )
 
 option(
-    BEMAN_EXEMPLAR_INSTALL_CONFIG_FILE_PACKAGE
+    BEMAN_SEQUENCE_NEXT_INSTALL_CONFIG_FILE_PACKAGE
     "Enable creating and installing a CMake config-file package. Default: ${PROJECT_IS_TOP_LEVEL}. Values: { ON, OFF }."
     ${PROJECT_IS_TOP_LEVEL}
 )
 
 include(CTest)
 
-add_subdirectory(src/beman/exemplar)
+add_subdirectory(src/beman/sequence_next)
 
-if(BEMAN_EXEMPLAR_BUILD_TESTS)
-    add_subdirectory(tests/beman/exemplar)
+if(BEMAN_SEQUENCE_NEXT_BUILD_TESTS)
+    add_subdirectory(tests/beman/sequence_next)
 endif()
 
-if(BEMAN_EXEMPLAR_BUILD_EXAMPLES)
+if(BEMAN_SEQUENCE_NEXT_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
