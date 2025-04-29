@@ -4,10 +4,10 @@
 #ifndef INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_SEQUENCE_NEXT
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_SEQUENCE_NEXT
 
-// ----------------------------------------------------------------------------
-
-namespace beman::sequence_next {
-}
+#include <beman/sequence_next/detail/set_next.hpp>
+#include <beman/sequence_next/detail/ignore_all.hpp>
+#include <beman/sequence_next/detail/iota.hpp>
+#include <beman/sequence_next/detail/then_each.hpp>
 
 // ----------------------------------------------------------------------------
 

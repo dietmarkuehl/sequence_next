@@ -1,6 +1,12 @@
 {
   "dependencies": [
     {
+      "name": "beman_execution",
+      "package_name": "beman_execution",
+      "git_repository": "https://github.com/bemanproject/execution.git",
+      "git_tag": "9cd2e66ba312c4396ac222868cc0486891cfa30b"
+    },
+    {
       "name": "googletest",
       "package_name": "GTest",
       "git_repository": "https://github.com/google/googletest.git",

@@ -1,9 +1,15 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
+find_package(beman_execution REQUIRED)
+
 include(GNUInstallDirs)
 
 add_library(beman.sequence_next)
 add_library(beman::sequence_next ALIAS beman.sequence_next)
+target_link_libraries(
+    beman.sequence_next
+    PRIVATE beman::execution
+)
 
 target_sources(beman.sequence_next PRIVATE sequence_next.cpp)
 
@@ -21,6 +27,7 @@ set_target_properties(
     PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON EXPORT_NAME sequence_next
 )
 
+if(FALSE)
 install(
     TARGETS beman.sequence_next COMPONENT beman.sequence_next
     EXPORT beman.sequence_next
@@ -61,4 +68,5 @@ if(BEMAN_SEQUENCE_NEXT_INSTALL_CONFIG_FILE_PACKAGE)
         FILE beman.sequence_next-targets.cmake
         COMPONENT beman.sequence_next
     )
+endif()
 endif()
