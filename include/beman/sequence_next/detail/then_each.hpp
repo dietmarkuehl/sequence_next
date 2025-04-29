@@ -5,13 +5,15 @@
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_THEN_EACH
 
 #include <beman/execution/execution.hpp>
-#include <iostream>
+#include <beman/execution/detail/suppress_push.hpp>
 
 // ----------------------------------------------------------------------------
 
 namespace beman::sequence_next::detail {
 
-struct then_each_t {
+struct then_each_t
+    : ::beman::execution::sender_adaptor_closure<then_each_t>
+{
     template <beman::execution::sender Sender, typename Fun>
     struct sender {
         using sender_concept = ::beman::execution::sender_t;
@@ -77,6 +79,10 @@ struct then_each_t {
     operator()(Sender&& sndr, Fun&& fun) const {
         return { ::std::forward<Sender>(sndr), ::std::forward<Fun>(fun) };
     }
+    template <typename Fun>
+    auto operator()(Fun&& fun) const {
+        return ::beman::execution::detail::sender_adaptor{*this, ::std::forward<Fun>(fun)};
+    }
 };
 
 }
@@ -87,5 +93,7 @@ namespace beman::sequence_next {
 }
 
 // ----------------------------------------------------------------------------
+
+#include <beman/execution/detail/suppress_pop.hpp>
 
 #endif

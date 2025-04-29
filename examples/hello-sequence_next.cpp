@@ -10,11 +10,8 @@ namespace sn = beman::sequence_next;
 // ----------------------------------------------------------------------------
 
 int main() {
-    std::cout << "hello, world\n";
-    ex::sync_wait(sn::ignore_all(sn::iota{2, 5}));
-    ex::sync_wait(sn::ignore_all(
-        sn::then_each(
-            sn::iota{2, 5},
-            [](auto x){ std::cout << "sequence element=" << x << '\n'; }
-        )));
+    ex::sync_wait(
+          sn::iota{2, 5}
+        | sn::then_each([](auto x){ std::cout << "element=" << x << '\n'; })
+        | sn::ignore_all);
 }

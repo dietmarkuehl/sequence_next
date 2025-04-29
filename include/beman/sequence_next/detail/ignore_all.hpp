@@ -6,11 +6,15 @@
 #ifndef INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_IGNORE_ALL
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_IGNORE_ALL
 
+#include <beman/execution/execution.hpp>
+
 // ----------------------------------------------------------------------------
 
 namespace beman::sequence_next::detail {
 
-struct ignore_all_t {
+struct ignore_all_t
+    : ::beman::execution::sender_adaptor_closure<ignore_all_t>
+{
     struct state_base {
         virtual ~state_base() = default;
         virtual void complete() = 0;
@@ -54,7 +58,8 @@ struct ignore_all_t {
     };
 
     template <beman::execution::sender Sender>
-    struct sender {
+    struct sender
+    {
         using sender_concept = ::beman::execution::sender_t;
         using completion_signatures = ::beman::execution::completion_signatures<
             ::beman::execution::set_value_t()
