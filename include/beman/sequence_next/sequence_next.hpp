@@ -9,6 +9,7 @@
 #include <beman/sequence_next/detail/iota.hpp>
 #include <beman/sequence_next/detail/set_next.hpp>
 #include <beman/sequence_next/detail/then_each.hpp>
+#include <beman/sequence_next/detail/conditional_element.hpp>
 
 // ----------------------------------------------------------------------------
 
