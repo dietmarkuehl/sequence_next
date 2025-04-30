@@ -23,8 +23,9 @@ int main() {
         | sn::ignore_all);
 
     ex::sync_wait(sn::conditional_element(
-        ex::just(2, 3)),
+        ex::just(2, 3),
         ex::then([](auto x, auto y){ std::cout << "x=" << x << ", y=" << y << "\n"; }),
         [](auto x, auto y){ return x < y; }
-        );
+    ) | ex::then([](auto&&...){})
+    );
 }

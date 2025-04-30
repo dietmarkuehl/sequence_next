@@ -4,6 +4,7 @@
 #ifndef INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_SEQUENCE_NEXT
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_SEQUENCE_NEXT
 
+#include <beman/execution/execution.hpp>
 #include <beman/sequence_next/detail/filter_each.hpp>
 #include <beman/sequence_next/detail/ignore_all.hpp>
 #include <beman/sequence_next/detail/iota.hpp>
