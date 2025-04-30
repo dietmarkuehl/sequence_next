@@ -13,7 +13,7 @@ namespace beman::sequence_next::detail {
 struct conditional_element_t {
 
 
-    template <::beman::execution::sender Sender_up, ::beman::execution::sender Sender_down, typename Pred>
+    template <::beman::execution::sender Sender_up, Factory factory, typename Pred>
     struct sender {
         using sender_concept = ::beman::execution::sender_t;
         using completion_signatures = ::beman::execution::completion_signatures<
@@ -42,15 +42,15 @@ struct conditional_element_t {
         }
 
         Sender_up   sender_up;
-        Sender_down sender_down;
+        Factory     factory;
         Pred        pred;
     };
 
-    template <::beman::execution::sender Sender_up, ::beman::execution::sender Sender_down, typename Pred>
+    template <::beman::execution::sender Sender_up, Factory factory, typename Pred>
     sender<::std::remove_cvref_t<Sender_up>, ::std::remove_cvref_t<Sender_down>, ::std::remove_cvref_t<Pred>>
-    operator()(Sender_up&& sndr_up, Sender_down&& sndr_down, Pred&& pred) const {
+    operator()(Sender_up&& sndr_up, Factory&& factory, Pred&& pred) const {
         return {
-            ::std::forward<Sender_up>(sndr_up), ::std::forward<Sender_down>(sndr_down), ::std::forward<Pred>(pred)};
+            ::std::forward<Sender_up>(sndr_up), ::std::forward<Factory>(factory), ::std::forward<Pred>(pred)};
     }
 };
 } // namespace beman::sequence_next::detail
