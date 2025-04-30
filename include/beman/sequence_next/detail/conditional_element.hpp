@@ -57,7 +57,7 @@ struct conditional_element_t {
                             std::move(sndr), std::move(this->st->receiver)));
                         auto& s{this->st->state_down.template emplace<down_state_t>(std::move(sndr),
                                                                                     std::move(this->st->receiver))};
-                        ::beman::execution::start(s.state);
+                        ::beman::execution::start(s);
                     } else {
                         ::beman::execution::set_value(std::move(this->st->receiver));
                     }

@@ -14,4 +14,6 @@ target_link_libraries(
 )
 
 include(GoogleTest)
-gtest_discover_tests(beman.sequence_next.tests.sequence_next)
+
+gtest_discover_tests(beman.sequence_next.tests)
+
