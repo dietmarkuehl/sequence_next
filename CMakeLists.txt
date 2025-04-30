@@ -2,6 +2,8 @@
 
 cmake_minimum_required(VERSION 3.25)
 
+set(BEMAN_EXECUTION_ENABLE_INSTALL ON)
+
 project(
     beman.sequence_next # CMake Project Name, which is also the name of the top-level
     # targets (e.g., library, executable, etc.).
