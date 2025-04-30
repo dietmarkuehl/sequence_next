@@ -6,10 +6,9 @@
 
 #include <beman/execution/execution.hpp>
 #include <beman/sequence_next/detail/set_next.hpp>
-#include <iostream>
+#include <type_traits>
 #include <utility>
 #include <variant>
-#include <type_traits>
 
 // ----------------------------------------------------------------------------
 
@@ -72,7 +71,6 @@ struct conditional_element_t {
 
                 template <typename... A>
                 auto set_value(A&&... a) && noexcept -> void {
-                    std::cout << "set_value receiver_up\n";
                     if (this->st->predicate(a...)) {
                         auto sndr = this->st->factory(
                             ::beman::execution::just(::std::forward<A>(a)...)
@@ -86,6 +84,11 @@ struct conditional_element_t {
                             std::move(this->st->receiver)
                         )};
                         ::beman::execution::start(s.state);
+                    }
+                    else {
+                        ::beman::execution::set_value(
+                            std::move(this->st->receiver)
+                        );
                     }
                 }
                 template <typename Error>
