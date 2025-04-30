@@ -23,14 +23,11 @@ int main() {
         | sn::ignore_all);
 
     for (int i{}; i != 5; ++i) {
-        ex::sync_wait(sn::conditional_element(
-            ex::just(i, 2),
-            ex::then([](auto x, auto y){
-                std::cout << "condition hold: (" << x << ", " << y << ")\n";
-            }),
-            [](auto x, auto y){ return x < y; }
-            )
-            | ex::then([](auto&&...){ std::cout << "complete\n"; })
-        );
+        ex::sync_wait(sn::conditional_element(ex::just(i, 2),
+                                              ex::then([](auto x, auto y) {
+                                                  std::cout << "condition hold: (" << x << ", " << y << ")\n";
+                                              }),
+                                              [](auto x, auto y) { return x < y; }) |
+                      ex::then([](auto&&...) { std::cout << "complete\n"; }));
     }
 }
