@@ -1,0 +1,22 @@
+// include/beman/sequence_next/detail/state_helper.hpp                -*-C++-*-
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+#ifndef INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_STATE_HELPER
+#define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_STATE_HELPER
+
+#include <beman/execution/execution.hpp>
+
+// ----------------------------------------------------------------------------
+
+namespace beman::sequence_next::detail {
+template <beman::execution::sender S, beman::execution::receiver R>
+struct state_helper {
+    using state_t = decltype(::beman::execution::connect(::std::declval<S>(), ::std::declval<R>()));
+    state_t state;
+    state_helper(S&& s, R&& r) : state(::beman::execution::connect(::std::forward<S>(s), ::std::forward<R>(r))) {}
+};
+} // namespace beman::sequence_next::detail
+
+// ----------------------------------------------------------------------------
+
+#endif

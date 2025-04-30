@@ -5,6 +5,7 @@
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_CONDITONAL_ELEMENT
 
 #include <beman/execution/execution.hpp>
+#include <beman/sequence_next/detail/state_helper.hpp>
 #include <beman/sequence_next/detail/set_next.hpp>
 #include <type_traits>
 #include <utility>
@@ -13,13 +14,6 @@
 // ----------------------------------------------------------------------------
 
 namespace beman::sequence_next::detail {
-template <beman::execution::sender S, beman::execution::receiver R>
-struct state_helper {
-    using sender_t = S;
-    using state_t  = decltype(::beman::execution::connect(::std::declval<sender_t>(), ::std::declval<R>()));
-    state_t state;
-    state_helper(S&& s, R&& r) : state(::beman::execution::connect(::std::forward<S>(s), ::std::forward<R>(r))) {}
-};
 
 struct conditional_element_t {
     template <::beman::execution::sender Sender_up, typename Factory, typename Predicate>
@@ -34,8 +28,9 @@ struct conditional_element_t {
         struct just_state_helper {
             template <typename... A>
             using type =
-                state_helper<decltype(std::declval<Factory>()(::beman::execution::just(std::declval<A>()...))),
-                             Receiver>;
+                ::beman::sequence_next::detail::state_helper<decltype(std::declval<Factory>()(
+                                                                 ::beman::execution::just(std::declval<A>()...))),
+                                                             Receiver>;
         };
         template <::beman::execution::receiver Receiver>
         struct state {
@@ -58,7 +53,8 @@ struct conditional_element_t {
                 auto set_value(A&&... a) && noexcept -> void {
                     if (this->st->predicate(a...)) {
                         auto sndr          = this->st->factory(::beman::execution::just(::std::forward<A>(a)...));
-                        using down_state_t = decltype(state_helper(std::move(sndr), std::move(this->st->receiver)));
+                        using down_state_t = decltype(::beman::sequence_next::detail::state_helper(
+                            std::move(sndr), std::move(this->st->receiver)));
                         auto& s{this->st->state_down.template emplace<down_state_t>(std::move(sndr),
                                                                                     std::move(this->st->receiver))};
                         ::beman::execution::start(s.state);
