@@ -6,6 +6,7 @@
 #ifndef INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_IGNORE_ALL
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_IGNORE_ALL
 
+#include <beman/sequence_next/detail/set_next.hpp>
 #include <beman/execution/execution.hpp>
 
 // ----------------------------------------------------------------------------
