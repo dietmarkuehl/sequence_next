@@ -1,35 +1,50 @@
-// include/beman/sequence_next/detail/then_each.hpp                   -*-C++-*-
+// include/beman/sequence_next/detail/filter_each.hpp                 -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#ifndef INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_THEN_EACH
-#define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_THEN_EACH
+#ifndef INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_FILTER_EACH
+#define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_FILTER_EACH
 
 #include <beman/sequence_next/detail/set_next.hpp>
 #include <beman/execution/execution.hpp>
-#include <beman/execution/detail/suppress_push.hpp>
 
 // ----------------------------------------------------------------------------
 
 namespace beman::sequence_next::detail {
 
-struct then_each_t
-    : ::beman::execution::sender_adaptor_closure<then_each_t>
+struct filter_each_t
+    : ::beman::execution::sender_adaptor_closure<filter_each_t>
 {
-    template <beman::execution::sender Sender, typename Fun>
+    template <beman::execution::sender Sender, typename Predicate>
     struct sender {
         using sender_concept = ::beman::execution::sender_t;
         using completion_signatures = ::beman::execution::completion_signatures<
             ::beman::execution::set_value_t()
         >;
 
+        struct state_base_base {
+            Predicate predicate;
+        };
         template <typename Receiver>
         struct state_base {
             Receiver rcvr;
-            Fun fun;
-            template <typename R, typename F>
-            state_base(R&& r, F&& f)
+            Predicate predicate;
+            template <typename R, typename P>
+            state_base(R&& r, P&& p)
                 : rcvr(std::forward<R>(r))
-                , fun(std::forward<F>(f)) {}
+                , predicate(std::forward<P>(p)) {}
+        };
+
+        template <typename ElementSender>
+        struct element_sender {
+            template <::beman::execution::receiver Receiver>
+            struct state {
+                using operation_state_concept = ::beman::execution::operation_state_t;
+                std::remove_cvref_t<Receiver> receiver;
+            };
+            using sender_concept = ::beman::execution::sender_t;
+            std::remove_cvref_t<ElementSender> downstream;
+
+
         };
 
         template <::beman::execution::receiver Receiver>
@@ -40,9 +55,7 @@ struct then_each_t
             template <::beman::execution::sender S>
             auto set_next(S sndr) {
                 auto s{this->st};
-                return ::beman::sequence_next::set_next(
-                    s->rcvr,
-                    std::move(sndr) | ::beman::execution::then(s->fun));
+                return element_sender(::std::move(sndr), this);
             }
             auto set_value() && noexcept {
                 ::beman::execution::set_value(std::move(this->st->rcvr));
@@ -69,34 +82,33 @@ struct then_each_t
         };
 
         Sender sender;
-        Fun    fun;
+        Predicate    predicate;
 
         template <::beman::execution::receiver Receiver>
         auto connect(Receiver&& rcvr) {
-            return state<std::remove_cvref_t<Receiver>>(std::move(this->fun), std::move(sender), std::forward<Receiver>(rcvr));
+            return state<std::remove_cvref_t<Receiver>>(std::move(this->predicate), std::move(sender), std::forward<Receiver>(rcvr));
         }
     };
 
-    template <::beman::execution::sender Sender, typename Fun>
-    sender<::std::remove_cvref_t<Sender>, ::std::remove_cvref_t<Fun>>
-    operator()(Sender&& sndr, Fun&& fun) const {
-        return { ::std::forward<Sender>(sndr), ::std::forward<Fun>(fun) };
+    template <::beman::execution::sender Sender, typename Predicate>
+    sender<::std::remove_cvref_t<Sender>, ::std::remove_cvref_t<Predicate>>
+    operator()(Sender&& sndr, Predicate&& predicate) const {
+        return { ::std::forward<Sender>(sndr), ::std::forward<Predicate>(predicate) };
     }
-    template <typename Fun>
-    auto operator()(Fun&& fun) const {
-        return ::beman::execution::detail::sender_adaptor{*this, ::std::forward<Fun>(fun)};
+    template <typename Predicate>
+    auto operator()(Predicate&& predicate) const {
+        return ::beman::execution::detail::sender_adaptor{*this, ::std::forward<Predicate>(predicate)};
     }
 };
+
 
 }
 
 namespace beman::sequence_next {
-    using then_each_t = ::beman::sequence_next::detail::then_each_t;
-    inline constexpr then_each_t then_each{};
+    using filter_each_t = ::beman::sequence_next::detail::filter_each_t;
+    inline constexpr filter_each_t filter_each{};
 }
 
 // ----------------------------------------------------------------------------
-
-#include <beman/execution/detail/suppress_pop.hpp>
 
 #endif
