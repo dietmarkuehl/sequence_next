@@ -6,10 +6,7 @@ include(GNUInstallDirs)
 
 add_library(beman.sequence_next)
 add_library(beman::sequence_next ALIAS beman.sequence_next)
-target_link_libraries(
-    beman.sequence_next
-    PUBLIC beman::execution
-)
+target_link_libraries(beman.sequence_next PUBLIC beman::execution)
 
 target_sources(beman.sequence_next PRIVATE sequence_next.cpp)
 
