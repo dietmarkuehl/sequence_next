@@ -11,9 +11,15 @@ if(NOT BEMAN_SEQUENCE_NEXT_LOCKFILE)
 endif()
 
 set(BemanSequenceNext_projectDir "${CMAKE_CURRENT_LIST_DIR}/..")
-message(TRACE "BemanSequenceNext_projectDir=\"${BemanSequenceNext_projectDir}\"")
+message(
+    TRACE
+    "BemanSequenceNext_projectDir=\"${BemanSequenceNext_projectDir}\""
+)
 
-message(TRACE "BEMAN_SEQUENCE_NEXT_LOCKFILE=\"${BEMAN_SEQUENCE_NEXT_LOCKFILE}\"")
+message(
+    TRACE
+    "BEMAN_SEQUENCE_NEXT_LOCKFILE=\"${BEMAN_SEQUENCE_NEXT_LOCKFILE}\""
+)
 file(
     REAL_PATH
     "${BEMAN_SEQUENCE_NEXT_LOCKFILE}"
@@ -45,7 +51,10 @@ function(BemanSequenceNext_provideDependency method package_name)
         "dependencies"
     )
     if(BemanSequenceNext_error)
-        message(FATAL_ERROR "${BemanSequenceNext_lockfile}: ${BemanSequenceNext_error}")
+        message(
+            FATAL_ERROR
+            "${BemanSequenceNext_lockfile}: ${BemanSequenceNext_error}"
+        )
     endif()
 
     # Get the length of the libraries array and store it in BemanSequenceNext_dependenciesObj
@@ -56,11 +65,18 @@ function(BemanSequenceNext_provideDependency method package_name)
         LENGTH "${BemanSequenceNext_dependenciesObj}"
     )
     if(BemanSequenceNext_error)
-        message(FATAL_ERROR "${BemanSequenceNext_lockfile}: ${BemanSequenceNext_error}")
+        message(
+            FATAL_ERROR
+            "${BemanSequenceNext_lockfile}: ${BemanSequenceNext_error}"
+    )
     endif()
 
     # Loop over each dependency object
-    math(EXPR BemanSequenceNext_maxIndex "${BemanSequenceNext_numDependencies} - 1")
+    math(
+        EXPR
+        BemanSequenceNext_maxIndex
+        "${BemanSequenceNext_numDependencies} - 1"
+    )
     foreach(BemanSequenceNext_index RANGE "${BemanSequenceNext_maxIndex}")
         set(BemanSequenceNext_errorPrefix
             "${BemanSequenceNext_lockfile}, dependency ${BemanSequenceNext_index}"
