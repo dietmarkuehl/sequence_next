@@ -14,7 +14,7 @@ namespace beman::sequence_next::detail {
 template <::beman::execution::sender S, ::beman::execution::receiver R>
 struct state_helper {
     using operation_state_concept = ::beman::execution::operation_state_t;
-    using state_t = decltype(::beman::execution::connect(::std::declval<S>(), ::std::declval<R>()));
+    using state_t                 = decltype(::beman::execution::connect(::std::declval<S>(), ::std::declval<R>()));
 
     state_t state;
 
