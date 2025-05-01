@@ -68,7 +68,7 @@ function(BemanSequenceNext_provideDependency method package_name)
         message(
             FATAL_ERROR
             "${BemanSequenceNext_lockfile}: ${BemanSequenceNext_error}"
-    )
+        )
     endif()
 
     # Loop over each dependency object
