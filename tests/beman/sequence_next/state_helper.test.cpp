@@ -28,19 +28,19 @@ TEST(SequenceNextTest, state_helper) {
     //       recorded disposition
     {
         auto                     res{result::none};
-        sn::detail::state_helper state(ex::just(1, 2), receiver(res));
+        sn::detail::state_helper state(ex::just(1, 2), receiver{res});
         ex::start(state);
         EXPECT_EQ(res, result::set_value);
     }
     {
         auto                     res{result::none};
-        sn::detail::state_helper state(ex::just_error(1), receiver(res));
+        sn::detail::state_helper state(ex::just_error(1), receiver{res});
         ex::start(state);
         EXPECT_EQ(res, result::set_error);
     }
     {
         auto                     res{result::none};
-        sn::detail::state_helper state(ex::just_stopped(), receiver(res));
+        sn::detail::state_helper state(ex::just_stopped(), receiver{res});
         ex::start(state);
         EXPECT_EQ(res, result::set_stopped);
     }
