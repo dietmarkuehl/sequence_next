@@ -17,7 +17,7 @@ inline constexpr struct set_next_t {
     }
 } set_next;
 
-}
+} // namespace beman::sequence_next
 
 // ----------------------------------------------------------------------------
 

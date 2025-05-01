@@ -6,5 +6,4 @@
 
 namespace sn = beman::sequence_next;
 
-TEST(SequenceNextTest, breathing) {
-}
+TEST(SequenceNextTest, breathing) {}
