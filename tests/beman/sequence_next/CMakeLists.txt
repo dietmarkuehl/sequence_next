@@ -6,9 +6,9 @@ find_package(GTest REQUIRED)
 include(GoogleTest)
 
 add_executable(beman.sequence_next.tests)
-target_sources(beman.sequence_next.tests PRIVATE
-    sequence_next.test.cpp
-    state_helper.test.cpp
+target_sources(
+    beman.sequence_next.tests
+    PRIVATE sequence_next.test.cpp state_helper.test.cpp
 )
 target_link_libraries(
     beman.sequence_next.tests
@@ -16,4 +16,3 @@ target_link_libraries(
 )
 
 gtest_discover_tests(beman.sequence_next.tests)
-
