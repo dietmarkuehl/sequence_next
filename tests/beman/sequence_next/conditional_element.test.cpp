@@ -19,7 +19,7 @@ struct receiver {
     auto set_stopped() && noexcept {}
 };
 
-auto test_condition(int value, bool expected) {
+auto test_condition(int value, [[maybe_unused]] bool expected) {
     bool                     called{false};
     sn::detail::state_helper state(sn::conditional_element(
                                        ex::just(value),
