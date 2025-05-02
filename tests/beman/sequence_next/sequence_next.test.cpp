@@ -8,3 +8,10 @@ namespace sn = beman::sequence_next;
 namespace ex = beman::execution;
 
 // ----------------------------------------------------------------------------
+
+TEST(SequenceNextTest, sequence_next) {
+    static_assert(std::same_as<decltype(sn::filter_each), const sn::filter_each_t>);
+    static_assert(std::same_as<decltype(sn::ignore_all), const sn::ignore_all_t>);
+    static_assert(std::same_as<decltype(sn::set_next), const sn::set_next_t>);
+    static_assert(std::same_as<decltype(sn::then_each), const sn::then_each_t>);
+}
