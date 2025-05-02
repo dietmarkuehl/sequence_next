@@ -81,10 +81,18 @@ struct filter_each_t : ::beman::execution::sender_adaptor_closure<filter_each_t>
                                                                                        Predicate&& predicate) const {
         return {::std::forward<Sender>(sndr), ::std::forward<Predicate>(predicate)};
     }
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
     template <typename Predicate>
     auto operator()(Predicate&& predicate) const {
         return ::beman::execution::detail::sender_adaptor{*this, ::std::forward<Predicate>(predicate)};
     }
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 };
 
 } // namespace beman::sequence_next::detail
