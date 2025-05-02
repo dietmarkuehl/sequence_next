@@ -37,15 +37,15 @@ struct iota {
                 st->helper.reset();
                 st->produce_next();
             }
-            void   set_error(auto&&) noexcept { /*-dk:TODO */ }
+            void set_error(auto&&) noexcept { /*-dk:TODO */ }
         };
 
         using set_next_sender = decltype(set_next(std::declval<Receiver&>(), ::beman::execution::just(0)));
         using set_next_state =
             decltype(::beman::execution::connect(std::declval<set_next_sender>(), std::declval<set_next_receiver>()));
         using helper_t = ::beman::sequence_next::detail::state_helper<set_next_sender, set_next_receiver>;
-        std::optional<helper_t>     helper;
-        void                        produce_next() {
+        std::optional<helper_t> helper;
+        void                    produce_next() {
             if (this->next != this->end) {
                 this->helper.emplace(set_next(this->rcvr, ::beman::execution::just(this->next++)),
                                      set_next_receiver{this});
