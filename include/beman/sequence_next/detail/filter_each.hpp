@@ -30,29 +30,19 @@ struct filter_each_t : ::beman::execution::sender_adaptor_closure<filter_each_t>
                     return ::beman::sequence_next::conditional_element(
                         ::std::move(sndr),
                         [&rcvr = this->st->rcvr]<typename A>(A&& a) {
-                            return ::beman::sequence_next::set_next(
-                                rcvr,
-                                ::std::forward<A>(a)
-                            );
+                            return ::beman::sequence_next::set_next(rcvr, ::std::forward<A>(a));
                         },
-                        this->st->predicate
-                    );
+                        this->st->predicate);
                 }
                 template <typename... A>
-                auto set_value(A&&... a) && noexcept ->void {
-                    ::beman::execution::set_value(
-                        ::std::move(this->st->rcvr),
-                        ::std::forward<A>(a)...
-                        );
+                auto set_value(A&&... a) && noexcept -> void {
+                    ::beman::execution::set_value(::std::move(this->st->rcvr), ::std::forward<A>(a)...);
                 }
                 template <typename E>
-                auto set_error(E&& e) && noexcept ->void {
-                    ::beman::execution::set_error(
-                        ::std::move(this->st->rcvr),
-                        ::std::forward<E>(e)
-                        );
+                auto set_error(E&& e) && noexcept -> void {
+                    ::beman::execution::set_error(::std::move(this->st->rcvr), ::std::forward<E>(e));
                 }
-                auto set_stopped() && noexcept ->void {
+                auto set_stopped() && noexcept -> void {
                     ::beman::execution::set_stopped(::std::move(this->st->rcvr));
                 }
 
@@ -67,14 +57,11 @@ struct filter_each_t : ::beman::execution::sender_adaptor_closure<filter_each_t>
 
             template <typename S, typename P, typename R>
             state(S&& s, P&& p, R&& r)
-                : rcvr(std::forward<R>(r))
-                , predicate(std::forward<P>(p))
-                , inner(::std::forward<S>(s), receiver{this}) {
-            }
+                : rcvr(std::forward<R>(r)),
+                  predicate(std::forward<P>(p)),
+                  inner(::std::forward<S>(s), receiver{this}) {}
 
-            auto start() & noexcept {
-                ::beman::execution::start(this->inner);
-            }
+            auto start() & noexcept { ::beman::execution::start(this->inner); }
         };
 
         Sender    sender;
