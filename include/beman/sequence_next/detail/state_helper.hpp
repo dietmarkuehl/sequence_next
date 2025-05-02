@@ -18,7 +18,10 @@ struct state_helper {
 
     state_t state;
 
-    state_helper(S&& s, R&& r) : state(::beman::execution::connect(::std::forward<S>(s), ::std::forward<R>(r))) {}
+    state_helper(S&& s, R&& r) : state(::beman::execution::connect(::std::forward<S>(s), ::std::forward<R>(r))) {
+    }
+    ~state_helper() {
+    }
 
     auto start() & noexcept { ::beman::execution::start(this->state); }
 };
