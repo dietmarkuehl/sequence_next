@@ -24,11 +24,12 @@ auto test_condition(int value, [[maybe_unused]] bool expected) {
     sn::detail::state_helper state(sn::conditional_element(
                                        ex::just(value),
                                        [&called](auto s) {
-                                           return ex::then(::std::move(s), [&called]<typename T>([[maybe_unused]] T x) {
-                                               static_assert(std::same_as<int, T>);
-                                               assert(x == 1);
-                                               called = true;
-                                           });
+                                           return ex::then(::std::move(s),
+                                                           [&called]<typename T>([[maybe_unused]] T x) {
+                                                               static_assert(std::same_as<int, T>);
+                                                               assert(x == 1);
+                                                               called = true;
+                                                           });
                                        },
                                        [](auto x) { return x == 1; }),
                                    receiver{});
