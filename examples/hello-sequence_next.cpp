@@ -13,7 +13,7 @@ int main() {
     std::cout << std::unitbuf;
     // clang-format off
     ex::sync_wait(sn::iota{1, 7}
-    | sn::filter_each([](auto x) { return true; })
+    | sn::filter_each([](auto x) { return x % 2; })
     | sn::then_each([](auto&&...){ std::cout << "next value\n"; })
     | sn::ignore_all
     );
