@@ -9,14 +9,9 @@ namespace ex = beman::execution;
 
 // ----------------------------------------------------------------------------
 
-TEST(SequenceNextTest, FilterEach) {
-    std::vector<int> results;
-    ex::sync_wait(sn::iota{2, 7} | sn::then_each([](auto x) { return x * 3; }) | sn::filter_each([](auto x) {
-                      static_assert(std::same_as<int, decltype(x)>);
-                      return x % 2;
-                  }) |
-                  sn::then_each([&](auto x) { results.push_back(x); }) | sn::ignore_all);
-    ASSERT_EQ(results.size(), 2);
-    EXPECT_EQ(results[0], 2);
-    EXPECT_EQ(results[1], 7);
+TEST(SequenceNextTest, sequence_next) {
+    static_assert(std::same_as<decltype(sn::filter_each), const sn::filter_each_t>);
+    static_assert(std::same_as<decltype(sn::ignore_all), const sn::ignore_all_t>);
+    static_assert(std::same_as<decltype(sn::set_next), const sn::set_next_t>);
+    static_assert(std::same_as<decltype(sn::then_each), const sn::then_each_t>);
 }

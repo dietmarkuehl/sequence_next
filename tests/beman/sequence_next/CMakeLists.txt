@@ -10,6 +10,7 @@ target_sources(
     beman.sequence_next.tests
     PRIVATE
         conditional_element.test.cpp
+        filter_each.test.cpp
         sequence_next.test.cpp
         state_helper.test.cpp
 )
