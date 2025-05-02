@@ -8,7 +8,10 @@ include(GoogleTest)
 add_executable(beman.sequence_next.tests)
 target_sources(
     beman.sequence_next.tests
-    PRIVATE conditional_element.test.cpp sequence_next.test.cpp state_helper.test.cpp
+    PRIVATE
+        conditional_element.test.cpp
+        sequence_next.test.cpp
+        state_helper.test.cpp
 )
 target_link_libraries(
     beman.sequence_next.tests
