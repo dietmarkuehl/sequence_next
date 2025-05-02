@@ -5,6 +5,8 @@
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_FILTER_EACH
 
 #include <beman/sequence_next/detail/set_next.hpp>
+#include <beman/sequence_next/detail/conditional_element.hpp>
+#include <beman/sequence_next/detail/state_helper.hpp>
 #include <beman/execution/execution.hpp>
 
 // ----------------------------------------------------------------------------
@@ -17,54 +19,62 @@ struct filter_each_t : ::beman::execution::sender_adaptor_closure<filter_each_t>
         using sender_concept        = ::beman::execution::sender_t;
         using completion_signatures = ::beman::execution::completion_signatures<::beman::execution::set_value_t()>;
 
-        struct state_base_base {
-            Predicate predicate;
-        };
         template <typename Receiver>
-        struct state_base {
+        struct state {
+            using operation_state_concept = ::beman::execution::operation_state_t;
+            struct receiver {
+                using receiver_concept = ::beman::execution::receiver_t;
+
+                template <::beman::execution::sender S>
+                auto set_next(S sndr) {
+                    return ::beman::sequence_next::conditional_element(
+                        ::std::move(sndr),
+                        [&rcvr = this->st->rcvr]<typename A>(A&& a) {
+                            return ::beman::sequence_next::set_next(
+                                rcvr,
+                                ::std::forward<A>(a)
+                            );
+                        },
+                        this->st->predicate
+                    );
+                }
+                template <typename... A>
+                auto set_value(A&&... a) && noexcept ->void {
+                    ::beman::execution::set_value(
+                        ::std::move(this->st->rcvr),
+                        ::std::forward<A>(a)...
+                        );
+                }
+                template <typename E>
+                auto set_error(E&& e) && noexcept ->void {
+                    ::beman::execution::set_error(
+                        ::std::move(this->st->rcvr),
+                        ::std::forward<E>(e)
+                        );
+                }
+                auto set_stopped() && noexcept ->void {
+                    ::beman::execution::set_stopped(::std::move(this->st->rcvr));
+                }
+
+                state* st;
+            };
+
+            using inner_t = ::beman::sequence_next::detail::state_helper<Sender, receiver>;
+
             Receiver  rcvr;
             Predicate predicate;
-            template <typename R, typename P>
-            state_base(R&& r, P&& p) : rcvr(std::forward<R>(r)), predicate(std::forward<P>(p)) {}
-        };
+            inner_t   inner;
 
-        template <typename ElementSender>
-        struct element_sender {
-            template <::beman::execution::receiver Receiver>
-            struct state {
-                using operation_state_concept = ::beman::execution::operation_state_t;
-                std::remove_cvref_t<Receiver> receiver;
-            };
-            using sender_concept = ::beman::execution::sender_t;
-            std::remove_cvref_t<ElementSender> downstream;
-        };
-
-        template <::beman::execution::receiver Receiver>
-        struct receiver {
-            using receiver_concept = ::beman::execution::receiver_t;
-            state_base<Receiver>* st;
-
-            template <::beman::execution::sender S>
-            auto set_next(S sndr) {
-                auto s{this->st};
-                return element_sender(::std::move(sndr), this);
+            template <typename S, typename P, typename R>
+            state(S&& s, P&& p, R&& r)
+                : rcvr(std::forward<R>(r))
+                , predicate(std::forward<P>(p))
+                , inner(::std::forward<S>(s), receiver{this}) {
             }
-            auto set_value() && noexcept { ::beman::execution::set_value(std::move(this->st->rcvr)); }
-        };
 
-        template <::beman::execution::receiver Receiver>
-        struct state : state_base<Receiver> {
-            using operation_state_concept = ::beman::execution::operation_state_t;
-            using inner_t =
-                decltype(::beman::execution::connect(std::declval<Sender>(), std::declval<receiver<Receiver>>()));
-
-            inner_t inner;
-
-            template <typename F, ::beman::execution::sender S, ::beman::execution::receiver R>
-            state(F&& f, S&& s, R&& r)
-                : state_base<Receiver>(std::forward<R>(r), std::forward<F>(f)),
-                  inner(::beman::execution::connect(std::forward<S>(s), receiver<Receiver>{this})) {}
-            void start() & noexcept { ::beman::execution::start(this->inner); }
+            auto start() & noexcept {
+                ::beman::execution::start(this->inner);
+            }
         };
 
         Sender    sender;
@@ -73,7 +83,7 @@ struct filter_each_t : ::beman::execution::sender_adaptor_closure<filter_each_t>
         template <::beman::execution::receiver Receiver>
         auto connect(Receiver&& rcvr) {
             return state<std::remove_cvref_t<Receiver>>(
-                std::move(this->predicate), std::move(sender), std::forward<Receiver>(rcvr));
+                std::move(this->sender), std::move(predicate), std::forward<Receiver>(rcvr));
         }
     };
 

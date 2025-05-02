@@ -22,6 +22,7 @@ struct state_helper {
 
     auto start() & noexcept { ::beman::execution::start(this->state); }
 };
+
 } // namespace beman::sequence_next::detail
 
 // ----------------------------------------------------------------------------
