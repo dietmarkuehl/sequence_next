@@ -61,7 +61,7 @@ struct filter_each_t : ::beman::execution::sender_adaptor_closure<filter_each_t>
 
             template <typename S, typename P, typename R>
             state(S&& s, P&& p, R&& r)
-                : state_base<Receiver>(std::forward<R>(r), std::forward<P>(p)),
+                : state_base<Receiver>{std::forward<R>(r), std::forward<P>(p)},
                   inner(::std::forward<S>(s), receiver<Receiver>{this}) {}
             auto start() & noexcept { ::beman::execution::start(this->inner); }
         };
