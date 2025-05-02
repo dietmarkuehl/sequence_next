@@ -10,11 +10,11 @@ namespace sn = beman::sequence_next;
 // ----------------------------------------------------------------------------
 
 int main() {
+    std::cout << std::unitbuf;
     // clang-format off
-    ex::sync_wait(sn::iota{2, 7}
-    | sn::then_each([](auto x) { return x * 3; })
-    | sn::filter_each([](auto x) { return x % 2; })
-    | sn::then_each([](auto x) { std::cout << "element2=" << x << '\n'; })
+    ex::sync_wait(sn::iota{1, 7}
+    | sn::filter_each([](auto x) { return true; })
+    | sn::then_each([](auto&&...){ std::cout << "next value\n"; })
     | sn::ignore_all
     );
     // clang-format on
