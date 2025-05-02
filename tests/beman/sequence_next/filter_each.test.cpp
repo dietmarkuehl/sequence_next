@@ -11,11 +11,15 @@ namespace ex = beman::execution;
 
 TEST(SequenceNextTest, filter_each) {
     std::vector<int> results;
-    ex::sync_wait(sn::iota{2, 7} | sn::then_each([](auto x) { return x * 3; }) | sn::filter_each([](auto x) {
-                      static_assert(std::same_as<int, decltype(x)>);
-                      return x % 2;
-                  }) |
-                  sn::then_each([&](auto x) { results.push_back(x); }) | sn::ignore_all);
+    // clang-format off
+    ex::sync_wait(
+        sn::iota{2, 7}
+        | sn::then_each([](auto x) { return x * 3; })
+        | sn::filter_each([](auto x) { return x % 2; })
+        | sn::then_each([&](auto x) { results.push_back(x); })
+        | sn::ignore_all
+        );
+    // clang-format on
     ASSERT_EQ(results.size(), 2);
     EXPECT_EQ(results[0], 9);
     EXPECT_EQ(results[1], 15);

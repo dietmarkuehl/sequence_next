@@ -16,4 +16,8 @@ foreach(example ${ALL_EXAMPLES})
         beman.sequence_next.examples.${example}
         PRIVATE beman::sequence_next beman::execution
     )
+    add_test(
+        NAME beman.sequence_next.examples.${example}
+        COMMAND $<TARGET_FILE:beman.sequence_next.examples.${example}>
+    )
 endforeach()
