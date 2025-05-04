@@ -5,7 +5,9 @@
 #define INCLUDED_INCLUDE_BEMAN_SEQUENCE_NEXT_DETAIL_IOTA
 
 #include <beman/sequence_next/detail/set_next.hpp>
+#include <beman/sequence_next/detail/state_helper.hpp>
 #include <beman/execution/execution.hpp>
+#include <memory>
 
 // ----------------------------------------------------------------------------
 
@@ -25,31 +27,29 @@ struct iota {
         int      next;
         int      end;
 
-        void start() & noexcept { produce_next(); }
+        void start() & noexcept { this->produce_next(); }
 
         struct set_next_receiver {
             using receiver_concept = ::beman::execution::receiver_t;
             state* s;
-            void   set_value() noexcept { this->s->produce_next(); }
-            void   set_error(auto&&) noexcept { /*-dk:TODO */ }
+            void   set_value() noexcept {
+                state* st{this->s};
+                st->helper.reset();
+                st->produce_next();
+            }
+            void set_error(auto&&) noexcept { /*-dk:TODO */ }
         };
 
         using set_next_sender = decltype(set_next(std::declval<Receiver&>(), ::beman::execution::just(0)));
         using set_next_state =
             decltype(::beman::execution::connect(std::declval<set_next_sender>(), std::declval<set_next_receiver>()));
-        struct state_helper {
-            set_next_state inner_state;
-            template <::beman::execution::sender S, ::beman::execution::receiver R>
-            state_helper(S&& s, R&& r)
-                : inner_state(::beman::execution::connect(std::forward<S>(s), std::forward<R>(r))) {}
-        };
-        std::optional<state_helper> helper;
-        void                        produce_next() {
+        using helper_t = ::beman::sequence_next::detail::state_helper<set_next_sender, set_next_receiver>;
+        std::optional<helper_t> helper;
+        void                    produce_next() {
             if (this->next != this->end) {
                 this->helper.emplace(set_next(this->rcvr, ::beman::execution::just(this->next++)),
                                      set_next_receiver{this});
-
-                ::beman::execution::start(this->helper->inner_state);
+                ::beman::execution::start(*this->helper);
             } else {
                 ::beman::execution::set_value(std::move(this->rcvr));
             }

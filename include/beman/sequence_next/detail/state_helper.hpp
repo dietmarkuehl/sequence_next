@@ -7,6 +7,7 @@
 #include <beman/execution/execution.hpp>
 #include <type_traits>
 #include <utility>
+#include <iostream>
 
 // ----------------------------------------------------------------------------
 
@@ -19,7 +20,7 @@ struct state_helper {
     state_t state;
 
     state_helper(S&& s, R&& r) : state(::beman::execution::connect(::std::forward<S>(s), ::std::forward<R>(r))) {}
-    ~state_helper() {}
+    ~state_helper() {} // NOTE: needs to be user-defined, -dk:TODO find out why
 
     auto start() & noexcept { ::beman::execution::start(this->state); }
 };
